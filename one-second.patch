@@ -1,0 +1,86 @@
+From nelson@crynwr.com Sat Jul 23 15:19:58 2005
+X-VM-v5-Data: ([nil nil nil nil nil nil nil nil nil]
+	["1512" "Tuesday" "20" "April" "2004" "13:06:49" "+0200" "Lennert Buytenhek" "buytenh@wantstofly.org" nil "61" "patch to make djbdns 1.05 cache its mmap() of the data.cdb file" "^From:" nil nil "4" nil nil nil nil nil nil nil nil nil]
+	nil)
+Return-Path: <nelson@crynwr.com>
+Delivered-To: nelson@desk.crynwr.com
+Received: (qmail 9047 invoked by alias); 23 Jul 2005 15:19:58 -0000
+Delivered-To: alias-nelson-nelson@crynwr.com
+Received: (qmail 9044 invoked by uid 500); 23 Jul 2005 15:19:58 -0000
+Comment: DomainKeys? See http://antispam.yahoo.com/domainkeys
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws;
+  s=dog; d=wantstofly.org;
+  b=IWNClqptgImEp3WfkGIht8VKuoHgvQcYS2QB6tjfjVSIFs+iulN4Fg1yMtJiDL3D  ;
+Message-ID: <20050723151958.9042.qmail@desk.crynwr.com>
+X-Original-To: buytenh
+Delivered-To: buytenh@wantstofly.org
+User-Agent: Mutt/1.4.1i
+X-Keywords:                 
+X-UID: 800
+From: Lennert Buytenhek <buytenh@wantstofly.org>
+To: nelson@crynwr.com
+Subject: patch to make djbdns 1.05 cache its mmap() of the data.cdb file
+Date: Tue, 20 Apr 2004 13:06:49 +0200
+
+Hi,
+
+This patch makes djbdns 1.05 cache its mmap() of the data.cdb file up to a
+maximum of one second.  Under high query load, this substantially reduces
+the number of times that the database file needs to be mapped and unmapped,
+and gives a two-digit percentage performance improvement under 100% system
+load (as discussed on the djbdns mailing list.)
+
+Could you stick a copy of the patch on www.tinydns.org please?  I don't
+have anywhere to host it myself at this point, and I would like to see it
+on that page -- is that acceptable to you?
+
+
+thanks,
+Lennert
+
+
+
+diff -urN djbdns-1.05.orig/tdlookup.c djbdns-1.05/tdlookup.c
+--- djbdns-1.05.orig/tdlookup.c	2001-02-11 22:11:45.000000000 +0100
++++ djbdns-1.05/tdlookup.c	2004-04-18 13:56:13.000000000 +0200
+@@ -280,15 +280,24 @@
+ 
+ int respond(char *q,char qtype[2],char ip[4])
+ {
+-  int fd;
++  static struct tai cdb_valid = { 0 };
++  static int fd = -1;
++  struct tai one_second;
+   int r;
+   char key[6];
+ 
+   tai_now(&now);
+-  fd = open_read("data.cdb");
+-  if (fd == -1) return 0;
+-  cdb_init(&c,fd);
+-
++  if (tai_less(&cdb_valid, &now)) {
++    if (fd != -1) {
++      cdb_free(&c);
++      close(fd);
++    }
++    fd = open_read("data.cdb");
++    if (fd == -1) return 0;
++    cdb_init(&c,fd);
++    tai_uint(&one_second, 1);
++    tai_add(&cdb_valid, &now, &one_second);
++  }
+   byte_zero(clientloc,2);
+   key[0] = 0;
+   key[1] = '%';
+@@ -304,7 +313,5 @@
+ 
+   r = doit(q,qtype);
+ 
+-  cdb_free(&c);
+-  close(fd);
+   return r;
+ }
+
+----- End forwarded message -----
+
