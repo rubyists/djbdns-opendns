@@ -121,7 +121,7 @@ int main(int argc,char **argv)
   seed_addtime(); start("env/DATALIMIT"); outs("3000000\n"); finish();
   seed_addtime(); perm(0644);
   seed_addtime(); start("run");
-  outs("#!/bin/sh\nexec 2>&1\nexec <seed\nexec chpst -e ./env sh -c '\n  exec chpst -u "); outs(user);
+  outs("#!/bin/sh\nexec 2>&1\nexec <seed\nexec chpst -e ./env sh -c '\n  exec chpst -U "); outs(user);
   outs(" -o250 -d \"$DATALIMIT\" ");
   outs(auto_home); outs("/bin/dnscache\n'\n"); finish();
   seed_addtime(); perm(0755);

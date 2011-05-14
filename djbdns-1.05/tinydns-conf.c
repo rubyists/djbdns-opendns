@@ -45,7 +45,7 @@ int main(int argc,char **argv)
   perm(0644);
 
   start("run");
-  outs("#!/bin/sh\nexec 2>&1\nexec chpst -u "); outs(user);
+  outs("#!/bin/sh\nexec 2>&1\nexec chpst -U "); outs(user);
   outs(" -e ./env -d300000 ");
   outs(auto_home); outs("/bin/tinydns\n");
   finish();
