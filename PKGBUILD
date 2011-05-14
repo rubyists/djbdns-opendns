@@ -45,7 +45,7 @@ md5sums=('3147c5cd56832aa3b41955c7a51cbeb2'
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-  echo gcc $CFLAGS -include /usr/include/errno.h > conf-cc
+  echo /opt/diet/bin/diet -Os gcc $CFLAGS > conf-cc
   echo /usr > conf-home
   patch -p0 < ../txt.patch || return 1
   patch -p1 < ../djbdns-1.05-test23.diff || return 1
@@ -54,7 +54,8 @@ build() {
   patch -p1 < ../one-second.patch || return 1
   patch -p0 < ../axfred.patch || return 1
   patch -p0 < ../nsd-xfr.patch || return 1
-  patch -p1 < ../runit.patch || return 1
+  patch -p2 < ../runit.patch || return 1
+  sed -i -e 's|^gcc|/opt/diet/bin/diet -Os gcc|' conf-ld
   make || return 1
   mkdir -p ${pkgdir}/usr/bin ${pkgdir}/etc || return 1
   
