@@ -5,12 +5,12 @@ post_install() {
   useradd -r -g djbdns -d / -s /bin/false dnscache  
 cat << EOF
 >>> Configure and run dnscache:
-	dnscache-conf dnscache dnslog /etc/dnscache [myip]
-	ln -s /etc/dnscache /service
+	dnscache-conf dnscache dnslog /etc/sv/dnscache [myip]
+	ln -s /etc/sv/dnscache /service
 
 >>> Configure and run tinydns:
-	tinydns-conf tinydns dnslog /etc/tinydns myip
-	ln -s /etc/tinydns /service
+	tinydns-conf tinydns dnslog /etc/sv/tinydns myip
+	ln -s /etc/sv/tinydns /service
 
 Note: Change myip to your public ip. If [myip] omitted dnscache will run on localhost.
       More help can be found at http://cr.yp.to/djbdns.html

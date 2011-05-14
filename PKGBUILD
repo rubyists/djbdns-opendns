@@ -8,7 +8,7 @@
 
 pkgname=djbdns
 pkgver=1.05
-pkgrel=1
+pkgrel=2
 pkgdesc="Tinydns and dnscache"
 arch=('i686' 'x86_64')
 url="http://cr.yp.to/djbdns.html"
