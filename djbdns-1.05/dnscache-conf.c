@@ -121,13 +121,13 @@ int main(int argc,char **argv)
   seed_addtime(); start("env/DATALIMIT"); outs("3000000\n"); finish();
   seed_addtime(); perm(0644);
   seed_addtime(); start("run");
-  outs("#!/bin/sh\nexec 2>&1\nexec <seed\nexec envdir ./env sh -c '\n  exec envuidgid "); outs(user);
-  outs(" softlimit -o250 -d \"$DATALIMIT\" ");
+  outs("#!/bin/sh\nexec 2>&1\nexec <seed\nexec chpst -e ./env sh -c '\n  exec chpst -u "); outs(user);
+  outs(" -o250 -d \"$DATALIMIT\" ");
   outs(auto_home); outs("/bin/dnscache\n'\n"); finish();
   seed_addtime(); perm(0755);
   seed_addtime(); start("log/run");
-  outs("#!/bin/sh\nexec setuidgid "); outs(loguser);
-  outs(" multilog t ./main\n"); finish();
+  outs("#!/bin/sh\nexec chpst -u "); outs(loguser);
+  outs(" svlogd t ./main\n"); finish();
   seed_addtime(); perm(0755);
   seed_addtime(); makedir("root");
   seed_addtime(); perm(02755);
