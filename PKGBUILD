@@ -27,7 +27,8 @@ source=("http://cr.yp.to/djbdns/$pkgname-$pkgver.tar.gz"
 	'axfred.patch'
 	'txt.patch'
 	'ipv6intremove.patch'
-	'nsd-xfr.patch')
+	'nsd-xfr.patch'
+  'runit.patch')
 _opendns_list='http://wiki.opennicproject.org/ClosestT2Servers'
 
 md5sums=('3147c5cd56832aa3b41955c7a51cbeb2'
@@ -39,7 +40,8 @@ md5sums=('3147c5cd56832aa3b41955c7a51cbeb2'
          'b3d5b1f23f65eb862b5667525ee3fb24'
          'a2a64986133d3e205a08cb275ca35669'
          '373d8370856e8e44b53aeadf5cae8e51'
-         '9ea8e388431e319a18e95b16200d0562')
+         '9ea8e388431e319a18e95b16200d0562'
+         'd1464552022c546104b2801e627d046d')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -52,6 +54,7 @@ build() {
   patch -p1 < ../one-second.patch || return 1
   patch -p0 < ../axfred.patch || return 1
   patch -p0 < ../nsd-xfr.patch || return 1
+  patch -p1 < ../runit.patch || return 1
   make || return 1
   mkdir -p ${pkgdir}/usr/bin ${pkgdir}/etc || return 1
   
