@@ -5,18 +5,26 @@
 # rel 4: Fixed http://article.gmane.org/gmane.network.djbdns/13864
 # rel 3: Patch IPv6, IXFR, MMAP cache and man pages.
 # rel 2: Fixed the regex to get root hints file and added desc.
+# Forked to -opendns by TJ Vanderpoel tj at rubyists dot com
+# May 14, 2011
+# rel 4: conflict with main djbdns
+# rel 3: support for ipsvd in axdfdns
+# rel 2: support for dietlibc
+# rel 1: support for runit
 
-pkgname=djbdns
+pkgname=djbdns-opendns
+provides=djbdns
+conflicts=djbdns
 pkgver=1.05
-pkgrel=2
+pkgrel=4
 pkgdesc="Tinydns and dnscache"
 arch=('i686' 'x86_64')
 url="http://cr.yp.to/djbdns.html"
 license=('Public domain')
-depends=('runit-dietlibc' 'ipsvd')
+depends=('runit-dietlibc' 'ipsvd-dietlibc')
 makedepends=('wget' 'gawk')
 install=djbdns.install
-source=("http://cr.yp.to/djbdns/$pkgname-$pkgver.tar.gz"
+source=("http://cr.yp.to/djbdns/djbdns-$pkgver.tar.gz"
 	'http://www.fefe.de/dns/djbdns-1.05-test23.diff.bz2'
 	'http://www.fefe.de/dns/djbdns-1.05-ixfr.diff.gz'
 	'http://tinydns.org/one-second.patch'
@@ -41,10 +49,10 @@ md5sums=('3147c5cd56832aa3b41955c7a51cbeb2'
          'a2a64986133d3e205a08cb275ca35669'
          '373d8370856e8e44b53aeadf5cae8e51'
          '9ea8e388431e319a18e95b16200d0562'
-         'd1464552022c546104b2801e627d046d')
+         'c8df76026145368fd3e85694d3becf04')
 
 build() {
-  cd "$srcdir/$pkgname-$pkgver"
+  cd "$srcdir/djbdns-$pkgver"
   echo /opt/diet/bin/diet -Os gcc $CFLAGS > conf-cc
   echo /usr > conf-home
   patch -p0 < ../txt.patch || return 1

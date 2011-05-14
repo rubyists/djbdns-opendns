@@ -45,8 +45,8 @@ int main(int argc,char **argv)
   perm(0644);
 
   start("run");
-  outs("#!/bin/sh\nexec 2>&1\nexec envuidgid "); outs(user);
-  outs(" envdir ./env softlimit -d250000 ");
+  outs("#!/bin/sh\nexec 2>&1\nexec chpst -U "); outs(user);
+  outs(" -e ./env -d250000 ");
   outs(auto_home); outs("/bin/walldns\n");
   finish();
   perm(0755);

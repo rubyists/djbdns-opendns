@@ -50,3 +50,63 @@ index db83f11..44702cf 100644
    outs(auto_home); outs("/bin/tinydns\n");
    finish();
    perm(0755);
+diff --git a/djbdns-1.05/axfrdns-conf.c b/djbdns-1.05/axfrdns-conf.c
+index 4dc8657..56a7637 100644
+--- a/djbdns-1.05/axfrdns-conf.c
++++ b/djbdns-1.05/axfrdns-conf.c
+@@ -49,8 +49,8 @@ int main(int argc,char **argv)
+   perm(0644);
+ 
+   start("run");
+-  outs("#!/bin/sh\nexec 2>&1\nexec envdir ./env sh -c '\n  exec envuidgid "); outs(user);
+-  outs(" softlimit -d300000 tcpserver -vDRHl0 -x tcp.cdb -- \"$IP\" 53 ");
++  outs("#!/bin/sh\nexec 2>&1\nexec chpst -e ./env sh -c '\n  exec chpst -U "); outs(user);
++  outs(" -d300000 tcpsvd -v -l $IP -i ./peers \"$IP\" 53 ");
+   outs(auto_home); outs("/bin/axfrdns\n'\n");
+   finish();
+   perm(0755);
+diff --git a/djbdns-1.05/pickdns-conf.c b/djbdns-1.05/pickdns-conf.c
+index 9edd184..6c00fa8 100644
+--- a/djbdns-1.05/pickdns-conf.c
++++ b/djbdns-1.05/pickdns-conf.c
+@@ -45,8 +45,8 @@ int main(int argc,char **argv)
+   perm(0644);
+ 
+   start("run");
+-  outs("#!/bin/sh\nexec 2>&1\nexec envuidgid "); outs(user);
+-  outs(" envdir ./env softlimit -d250000 ");
++  outs("#!/bin/sh\nexec 2>&1\nexec chpst -U "); outs(user);
++  outs(" -e ./env -d250000 ");
+   outs(auto_home); outs("/bin/pickdns\n");
+   finish();
+   perm(0755);
+diff --git a/djbdns-1.05/rbldns-conf.c b/djbdns-1.05/rbldns-conf.c
+index 79d446f..4a2bd40 100644
+--- a/djbdns-1.05/rbldns-conf.c
++++ b/djbdns-1.05/rbldns-conf.c
+@@ -50,8 +50,8 @@ int main(int argc,char **argv)
+   perm(0644);
+ 
+   start("run");
+-  outs("#!/bin/sh\nexec 2>&1\nexec envuidgid "); outs(user);
+-  outs(" envdir ./env softlimit -d250000 ");
++  outs("#!/bin/sh\nexec 2>&1\nexec chpst -U "); outs(user);
++  outs(" -e ./env -d250000 ");
+   outs(auto_home); outs("/bin/rbldns\n");
+   finish();
+   perm(0755);
+diff --git a/djbdns-1.05/walldns-conf.c b/djbdns-1.05/walldns-conf.c
+index b46f19a..e0ed3d0 100644
+--- a/djbdns-1.05/walldns-conf.c
++++ b/djbdns-1.05/walldns-conf.c
+@@ -45,8 +45,8 @@ int main(int argc,char **argv)
+   perm(0644);
+ 
+   start("run");
+-  outs("#!/bin/sh\nexec 2>&1\nexec envuidgid "); outs(user);
+-  outs(" envdir ./env softlimit -d250000 ");
++  outs("#!/bin/sh\nexec 2>&1\nexec chpst -U "); outs(user);
++  outs(" -e ./env -d250000 ");
+   outs(auto_home); outs("/bin/walldns\n");
+   finish();
+   perm(0755);
